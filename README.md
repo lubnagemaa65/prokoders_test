@@ -1,16 +1,5 @@
-# prokoders_test
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+use skeltonizer as loading indicator
+2- using supabase for authentication
+3- use   baseUrl: 'https://675fe7cd1f7ad2426999d8bf.mockapi.io/api/v1', as mock api
+4- bookFactory class for factory pattern
+the app contain 2 pages login and BookListScreen
