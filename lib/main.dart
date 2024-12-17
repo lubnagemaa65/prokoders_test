@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prokoders_test/providers/item_provider.dart';
 import 'package:prokoders_test/view/screens/home/home_screen.dart';
+import 'package:prokoders_test/view/screens/login/login_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Book List',
         theme: ThemeData(primarySwatch: Colors.blue),
-        home: const BookListScreen(),
+        home: const LoginScreen(),
       ),
     );
   }
