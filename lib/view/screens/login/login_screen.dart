@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:prokoders_test/services/auth_service.dart';
+import 'package:prokoders_test/view/screens/home/home_screen.dart';
 import 'package:prokoders_test/view/widgets/textField.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -18,31 +19,40 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isLoading = false;
 
   Future<void> _login() async {
-    if (!_formKey.currentState!.validate()) return;
+    if (!_formKey.currentState!.validate()) return; // Validate form inputs
 
-    setState(() => _isLoading = true);
+    setState(() => _isLoading = true); // Show loading indicator
 
     try {
       final user = await _authService.login(
-        _emailController.text,
-        _passwordController.text,
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
       );
 
       if (user != null) {
-        Navigator.pushReplacementNamed(context, '/home');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Login successful!')),
+        );
+
+        // Navigate to the BookListScreen
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const BookListScreen()),
+        );
       } else {
-        _showError('Login failed. Please try again.');
+        _showError('Login failed. Please check your credentials.');
       }
     } catch (e) {
-      _showError(e.toString());
+      _showError('Error: ${e.toString()}');
     } finally {
-      setState(() => _isLoading = false);
+      setState(() => _isLoading = false); // Hide loading indicator
     }
   }
 
   void _showError(String message) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
   }
 
   @override
@@ -54,6 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Form(
           key: _formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               CustomTextField(
                 controller: _emailController,
@@ -69,6 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   return null;
                 },
               ),
+              const SizedBox(height: 10),
               CustomTextField(
                 controller: _passwordController,
                 labelText: 'Password',
@@ -85,7 +97,32 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: _isLoading ? null : _login,
+                onPressed: () async {
+                  if (_formKey.currentState?.validate() ?? false) {
+                    setState(() => _isLoading = true);
+
+                    try {
+                      final user = await _authService.login(
+                        _emailController.text.trim(),
+                        _passwordController.text.trim(),
+                      );
+
+                      if (user != null) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const BookListScreen()),
+                        );
+                      }
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(e.toString())),
+                      );
+                    } finally {
+                      setState(() => _isLoading = false);
+                    }
+                  }
+                },
                 child: _isLoading
                     ? const CircularProgressIndicator(color: Colors.white)
                     : const Text('Login'),
